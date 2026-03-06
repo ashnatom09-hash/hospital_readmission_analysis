@@ -1,0 +1,113 @@
+SELECT * FROM patient LIMIT 10;
+SELECT column_name, data_type
+FROM information_schema.columns
+WHERE table_name = 'patient';
+#1What is the overall 30-day readmission rate?
+SELECT 
+    COUNT(*) AS total_patients,
+    COUNT(*) FILTER (WHERE readmitted = 'yes') AS total_readmitted,
+    ROUND(
+        100.0 * COUNT(*) FILTER (WHERE readmitted = 'yes') / COUNT(*),
+        2
+    ) AS readmission_rate_percentage
+FROM patient;
+
+#2READMISSION BY AGE 
+SELECT 
+    age,
+    COUNT(*) AS total_patients,
+    COUNT(*) FILTER (WHERE readmitted = 'yes') AS total_readmitted,
+    ROUND(
+        100.0 * COUNT(*) FILTER (WHERE readmitted = 'yes') / COUNT(*),
+        2
+    ) AS readmission_rate_percentage
+FROM patient
+GROUP BY age
+ORDER BY readmission_rate_percentage DESC;
+
+#3Are previous inpatient visits strong predictors of readmission?
+SELECT 
+    n_inpatient,
+    COUNT(*) AS total_patients,
+    COUNT(*) FILTER (WHERE readmitted = 'yes') AS total_readmitted,
+    ROUND(
+        100.0 * COUNT(*) FILTER (WHERE readmitted = 'yes') / COUNT(*),
+        2
+    ) AS readmission_rate_percentage
+FROM patient
+GROUP BY n_inpatient
+ORDER BY readmission_rate_percentage DESC;
+
+
+#4Do emergency visits (n_emergency) increase readmission risk?
+SELECT 
+    n_emergency,
+    COUNT(*) AS total_patients,
+    COUNT(*) FILTER (WHERE readmitted = 'yes') AS total_readmitted,
+    ROUND(
+        100.0 * COUNT(*) FILTER (WHERE readmitted = 'yes') / COUNT(*),
+        2
+    ) AS readmission_rate_percentage
+FROM patient
+GROUP BY n_emergency
+ORDER BY n_emergency;
+#5Does medication change during hospital stay affect readmission?
+SELECT 
+    change,
+    COUNT(*) AS total_patients,
+    COUNT(*) FILTER (WHERE readmitted = 'yes') AS total_readmitted,
+    ROUND(
+        100.0 * COUNT(*) FILTER (WHERE readmitted = 'yes') / COUNT(*),
+        2
+    ) AS readmission_rate_percentage
+FROM patient
+GROUP BY change
+ORDER BY change;
+#6Does the number of medications (n_medications) influence readmission?
+SELECT 
+    n_medications,
+    COUNT(*) AS total_patients,
+    COUNT(*) FILTER (WHERE readmitted = 'yes') AS total_readmitted,
+    ROUND(
+        100.0 * COUNT(*) FILTER (WHERE readmitted = 'yes') / COUNT(*),
+        2
+    ) AS readmission_rate_percentage
+FROM patient
+GROUP BY n_medications
+ORDER BY n_medications;
+#7Does glucose test result affect readmission?
+SELECT 
+    glucose_test,
+    COUNT(*) AS total_patients,
+    COUNT(*) FILTER (WHERE readmitted = 'yes') AS total_readmitted,
+    ROUND(
+        100.0 * COUNT(*) FILTER (WHERE readmitted = 'yes') / COUNT(*),
+        2
+    ) AS readmission_rate_percentage
+FROM patient
+GROUP BY glucose_test
+ORDER BY readmission_rate_percentage DESC;
+#8Does A1C test result affect readmission?
+SELECT 
+    "A1Ctest",
+    COUNT(*) AS total_patients,
+    COUNT(*) FILTER (WHERE readmitted = 'yes') AS total_readmitted,
+    ROUND(
+        100.0 * COUNT(*) FILTER (WHERE readmitted = 'yes') / COUNT(*),
+        2
+    ) AS readmission_rate_percentage
+FROM patient
+GROUP BY "A1Ctest"
+ORDER BY readmission_rate_percentage DESC;
+#9Does being on diabetes medication (diabetes_med) affect readmission
+SELECT 
+    diabetes_med,
+    COUNT(*) AS total_patients,
+    COUNT(*) FILTER (WHERE readmitted = 'yes') AS total_readmitted,
+    ROUND(
+        100.0 * COUNT(*) FILTER (WHERE readmitted = 'yes') / COUNT(*),
+        2
+    ) AS readmission_rate_percentage
+FROM patient
+GROUP BY diabetes_med
+ORDER BY readmission_rate_percentage DESC;
